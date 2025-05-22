@@ -1,0 +1,107 @@
+name: "python-sandbox"
+description: "Python execution sandbox"
+
+mode: ONCE
+hostname: "sandbox"
+time_limit: 30
+daemon: false
+max_cpus: 1
+
+cwd: "/app/workspace"
+
+clone_newnet: true
+clone_newuser: true
+clone_newns: true
+clone_newpid: true
+clone_newipc: true
+clone_newuts: true
+clone_newcgroup: true
+
+keep_env: false
+envar: "PYTHONPATH=/app"
+envar: "PYTHONDONTWRITEBYTECODE=1"
+envar: "PYTHONUNBUFFERED=1"
+envar: "PATH=/app/venv/bin:/usr/local/bin:/usr/bin:/bin"
+
+rlimit_as: 1024
+rlimit_fsize: 20
+rlimit_nofile: 30
+rlimit_nproc: 40
+
+mount {
+  src: "/usr"
+  dst: "/usr"
+  is_bind: true
+  rw: false
+}
+
+mount {
+  src: "/lib"
+  dst: "/lib"
+  is_bind: true
+  rw: false
+}
+
+mount {
+  src: "/lib64"
+  dst: "/lib64"
+  is_bind: true
+  rw: false
+  mandatory: false
+}
+
+mount {
+  src: "/bin"
+  dst: "/bin"
+  is_bind: true
+  rw: false
+}
+
+mount {
+  src: "/app/venv"
+  dst: "/app/venv"
+  is_bind: true
+  rw: false
+}
+
+mount {
+  src: "/etc/passwd"
+  dst: "/etc/passwd"
+  is_bind: true
+  rw: false
+}
+
+mount {
+  src: "/etc/group"
+  dst: "/etc/group"
+  is_bind: true
+  rw: false
+}
+
+mount {
+  src: "/dev/urandom"
+  dst: "/dev/urandom"
+  is_bind: true
+  rw: false
+}
+
+mount {
+  src: "/dev/null"
+  dst: "/dev/null"
+  is_bind: true
+  rw: true
+}
+
+mount {
+  dst: "/tmp"
+  fstype: "tmpfs"
+  rw: true
+  options: "size=32M,mode=1777"
+}
+
+mount {
+  src: "/app/workspace"
+  dst: "/app/workspace"
+  is_bind: true
+  rw: true
+}
