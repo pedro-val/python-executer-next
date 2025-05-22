@@ -9,7 +9,7 @@ export async function POST(request) {
         success: false,
         error: {
           type: 'PayloadError',
-          message: 'Payload size exceeds 1MB limit'
+          details: 'Payload size exceeds 1MB limit'
         }
       }, { status: 413 });
     }
@@ -22,7 +22,7 @@ export async function POST(request) {
         success: false,
         error: {
           type: 'ParseError',
-          message: 'Invalid JSON in request body'
+          details: 'Invalid JSON in request body'
         }
       }, { status: 400 });
     }
@@ -32,7 +32,7 @@ export async function POST(request) {
         success: false,
         error: {
           type: 'ValidationError',
-          message: 'Script not provided'
+          details: 'Script not provided'
         }
       }, { status: 400 });
     }
@@ -42,7 +42,7 @@ export async function POST(request) {
         success: false,
         error: {
           type: 'ValidationError',
-          message: 'Script must contain a main() function'
+          details: 'Script must contain a main() function'
         }
       }, { status: 400 });
     }
