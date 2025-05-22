@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "Python Executer",
-  description: "Um ambiente seguro para executar código Python",
+  description: "Safely execute Python code in your browser.",
   icons: {
     icon: '/python.png',
   },

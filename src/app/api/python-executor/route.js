@@ -60,10 +60,9 @@ export async function POST(request) {
     
     const statusCode = result.error?.type === 'SystemError' ? 500 : 400;
     
-    // Modificação para capturar e retornar o erro completo
     return NextResponse.json({
       success: false,
-      error: result.stderr || result.error?.message || result.error || 'Erro desconhecido',
+      error: result.stderr || result.error?.message || result.error || 'Unknown error',
       stdout: result.stdout,
       stderr: result.stderr
     }, { status: statusCode });

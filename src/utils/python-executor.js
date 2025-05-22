@@ -9,11 +9,6 @@ const PYTHON_PATH = process.env.PYTHON_PATH || 'python';
 const NSJAIL_CONFIG_PATH = process.env.NSJAIL_CONFIG_PATH || path.join(process.cwd(), 'config', 'nsjail_config.proto');
 const WORKSPACE_DIR = process.env.WORKSPACE_DIR || path.join(process.cwd(), 'workspace');
 
-/**
- * Execute Python code securely using nsjail
- * @param {string} pythonCode
- * @returns {Promise<{result: Object, stdout: string}>}
- */
 export async function executePythonCode(pythonCode) {
   if (!pythonCode.includes('def main():')) {
     throw new Error('Script must contain a main() function');
@@ -61,11 +56,6 @@ export async function executePythonCode(pythonCode) {
   }
 }
 
-/**
- * Create a wrapper script to capture main() return value and stdout
- * @param {string} originalScript
- * @returns {string}
- */
 function createWrapperScript(originalScript) {
   return `
 import sys
@@ -76,7 +66,6 @@ import traceback
 from contextlib import redirect_stdout, redirect_stderr
 
 def format_error(error_type, error_message, error_traceback):
-    """Format error information into a structured dictionary."""
     return {
         "error": {
             "type": error_type,
@@ -85,15 +74,12 @@ def format_error(error_type, error_message, error_traceback):
         }
     }
 
-# Capture both stdout and stderr
 stdout_buffer = io.StringIO()
 stderr_buffer = io.StringIO()
 
-# Original script
 ${originalScript}
 
 try:
-    # Validate main function exists
     if 'main' not in globals() or not callable(globals()['main']):
         result = format_error(
             "RuntimeError",
@@ -101,12 +87,10 @@ try:
             ""
         )
     else:
-        # Execute main() and capture output
         with redirect_stdout(stdout_buffer), redirect_stderr(stderr_buffer):
             try:
                 main_result = main()
                 
-                # Validate JSON serialization
                 try:
                     json.dumps(main_result)
                     result = {
@@ -126,14 +110,12 @@ try:
                     traceback.format_exc()
                 )
 except Exception as e:
-    # Catch any other unexpected errors
     result = format_error(
         "SystemError",
         "Unexpected error during execution",
         traceback.format_exc()
     )
 
-# Output the final result with stdout and stderr
 final_output = {
     **result,
     "stdout": stdout_buffer.getvalue(),
@@ -145,11 +127,6 @@ print(json.dumps(final_output))
 `;
 }
 
-/**
- * Parse the execution output to extract result and output streams
- * @param {string} output
- * @returns {{result: Object, stdout: string, stderr: string, error?: Object}}
- */
 function parseExecutionOutput(output) {
   try {
     const parts = output.split('___EXECUTION_RESULT___');

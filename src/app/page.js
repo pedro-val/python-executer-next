@@ -109,33 +109,26 @@ export default function Home() {
   const extractPythonError = (errorMessage) => {
     if (!errorMessage) return 'Erro desconhecido';
     
-    // Extrai apenas a parte relevante do erro Python
     const pythonErrorRegex = /File ".*?", line \d+[\s\S]*?(\w+Error:.*?)(?:\n\[I\]|\n$|$)/;
     const syntaxErrorRegex = /File ".*?", line \d+[\s\S]*?\^\s*\n\s*(\w+Error:.*?)(?:\n\[I\]|\n$|$)/;
     
-    // Tenta encontrar erros de sintaxe primeiro (que têm o marcador ^)
     const syntaxMatch = errorMessage.match(syntaxErrorRegex);
     if (syntaxMatch) {
-      // Extrai as linhas relevantes do erro de sintaxe
       const errorLines = errorMessage.match(/File ".*?", line \d+[\s\S]*?\^\s*\n\s*\w+Error:.*?(?:\n\[I\]|\n$|$)/);
       return errorLines ? errorLines[0].trim() : syntaxMatch[0].trim();
     }
     
-    // Tenta encontrar outros erros Python
     const pythonMatch = errorMessage.match(pythonErrorRegex);
     if (pythonMatch) {
-      // Extrai as linhas relevantes do erro
       const errorLines = errorMessage.match(/File ".*?", line \d+[\s\S]*?\w+Error:.*?(?:\n\[I\]|\n$|$)/);
       return errorLines ? errorLines[0].trim() : pythonMatch[0].trim();
     }
     
-    // Se não encontrar um padrão específico, tenta extrair qualquer mensagem de erro
     const anyErrorMatch = errorMessage.match(/(\w+Error:.*?)(?:\n\[I\]|\n$|$)/);
     if (anyErrorMatch) {
       return anyErrorMatch[0].trim();
     }
     
-    // Se tudo falhar, retorna apenas as primeiras linhas da mensagem
     const lines = errorMessage.split('\n');
     const relevantLines = lines.filter(line => 
       !line.startsWith('[I]') && 
@@ -166,26 +159,21 @@ export default function Home() {
       
       const data = await response.json();
       
-      // Registra a resposta completa para depuração
       console.log('Resposta completa:', data);
       
       if (data.error) {
         let errorMessage = '';
         
         if (typeof data.error === 'object') {
-          // Se o erro for um objeto, extrai a mensagem ou detalhes
           errorMessage = JSON.stringify(data.error.details);
         } else {
-          // Se for uma string, usa diretamente
           errorMessage = data.error;
         }
         
-        // Também verifica se há algo em stderr
         if (data.stderr && data.stderr.trim()) {
           errorMessage = data.stderr;
         }
         
-        // Exibe o erro completo sem processamento adicional
         setError(extractPythonError(errorMessage));
         setStdout(data.stdout || '');
         return;
@@ -239,7 +227,6 @@ export default function Home() {
           </div>
         </div>
         
-        {/* Seção de Erro */}
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
             <pre className="whitespace-pre-wrap font-mono text-sm overflow-auto">{error}</pre>
@@ -252,7 +239,6 @@ export default function Home() {
           </div>
         )}
         
-        {/* Seção dos Resultados */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <h2 className="text-xl font-semibold mb-2">Standard Output</h2>
