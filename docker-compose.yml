@@ -1,0 +1,11 @@
+services:
+  python-executor:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: python-executor-next
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./workspace:/app/workspace
+    restart: unless-stopped

@@ -84,7 +84,7 @@ const JSONObject = ({ data, isRoot = false }) => {
 const JSONViewer = ({ data }) => {
   if (!data) return null;
   return (
-    <pre className="bg-gray-100 p-3 rounded whitespace-pre-wrap font-mono text-sm">
+    <pre className="bg-black text-white p-3 rounded whitespace-pre-wrap font-mono text-sm">
       {JSON.stringify(data, null, 2)}
     </pre>
   );
@@ -242,7 +242,7 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <h2 className="text-xl font-semibold mb-2">Standard Output</h2>
-            <pre className="bg-gray-100 p-3 rounded whitespace-pre-wrap font-mono text-sm min-h-[150px] max-h-[300px] overflow-auto">
+            <pre className="bg-black text-white p-3 rounded whitespace-pre-wrap font-mono text-sm min-h-[150px] max-h-[300px] overflow-auto h-[300px]">
               {stdout}
             </pre>
           </div>
@@ -252,7 +252,7 @@ export default function Home() {
             {result ? (
               <JSONViewer data={result} />
             ) : (
-              <pre className="bg-gray-100 p-3 rounded whitespace-pre-wrap font-mono text-sm min-h-[150px] max-h-[300px] overflow-auto"></pre>
+              <pre className="bg-black text-white p-3 rounded whitespace-pre-wrap font-mono text-sm min-h-[150px] max-h-[300px] overflow-auto h-[300px]"></pre>
             )}
           </div>
         </div>
